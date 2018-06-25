@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ImageRecognition from './ImageRecognition';
+import ImageRecognitionQuestion from './ImageRecognitionQuestion';
 
 
 
@@ -18,10 +19,14 @@ const dimension = 4;
 class ImageRecognitionApp extends React.Component {
 
   render() {
-    return (<ImageRecognition
+    return (<div><ImageRecognition
               dimension={dimension}
               images={images}
-              showLabels={true}/>);
+              showLabels={true}/>
+            <ImageRecognitionQuestion
+              dimension={dimension}
+              images={images}
+              showLabels={true}/></div>);
   }
 }
 
