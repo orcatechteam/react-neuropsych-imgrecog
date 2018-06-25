@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ImageRecognition from './ImageRecognition';
-import './index.css';
+
 
 
 const images = ['large_black_triangle.png',
