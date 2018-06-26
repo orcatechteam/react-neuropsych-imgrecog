@@ -15,21 +15,32 @@ class ImageRecognitionQuestion extends React.Component {
     // labels for the grids
     this.columnNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     this.rowNames = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26'];
+    this.clicks = []; // an array of the click history
 
     // get the saved correct answer and coordinates from sessionStorage
     this.correctAnswer = sessionStorage.getItem('ImageRecognitionCorrectAnswer');
     this.correctCoordinate = sessionStorage.getItem('ImageRecognitionCorrectCoordinate');
     this.imageLinksGrid = sessionStorage.getItem('ImageRecognitionArrayTest');
 
-    console.log(this.correctAnswer);
-    console.log(this.correctCoordinate);
-    console.log(this.imageLinksGrid);
+    // console.log(this.correctAnswer);
+    // console.log(this.correctCoordinate);
+    // console.log(this.imageLinksGrid);
+  }
+
+  // lifecycle functions
+  componentWillUnmount() {
+    this.handleCompletion();
   }
 
   static propTypes = {
     dimension: PropTypes.number.isRequired,
     images: PropTypes.array.isRequired,
-    showLabels: PropTypes.bool.isRequired
+    showLabels: PropTypes.bool.isRequired,
+    correctImgName: PropTypes.string.isRequired,
+    correctCoordinate: PropTypes.string.isRequired,
+    imageLinksGrid: PropTypes.array.isRequired,
+    onSelect: PropTypes.func.isRequired,
+    onComplete: PropTypes.func.isRequired
   }
 
   renderBox(key) {
@@ -99,22 +110,49 @@ class ImageRecognitionQuestion extends React.Component {
   }
 
   handleClick(coordinate) {
+    //TODO: the name of the image of any that was selected
     let newState = {};
+    let click = {
+      coordinate: coordinate,
+      timestamp: new Date()
+    };
+
     if (coordinate === this.state.selectedBoxCoordinate) { // user has selected a box already selected - deselected it
       console.log('Deselected: ' + coordinate);
       newState.selectedBoxCoordinate = '';
+      click.action = 'Deselected';
+      click.status = 'Incorrect';
+
     } else { // user has selected a new coordinate - this is the new selection
       console.log('Selected: ' + coordinate);
       newState.selectedBoxCoordinate = coordinate;
+      click.action = 'Selected';
       if (coordinate === this.correctCoordinate) {
         console.log('Correct!');
+        click.status = 'Correct';
       } else {
         console.log('Incorrect!');
+        click.status = 'Incorrect';
       }
     }
+    this.clicks.push(click);
     this.setState(newState);
 
-    //TODO: Send the data on the selected box 
+    // Send the data on the selected box
+    this.props.onSelect(click);
+  }
+
+  handleCompletion() {
+    let data = {
+      timestamp: new Date(),
+      clicks: this.clicks,
+      correctImgName: this.props.correctImgName,
+      correctCoordinate: this.props.correctCoordinate,
+      imageLinksGrid: this.props.imageLinksGrid,
+      status: this.state.selectedBoxCoordinate === this.props.correctCoordinate
+    }
+
+    this.props.onComplete(data);
   }
 
 }

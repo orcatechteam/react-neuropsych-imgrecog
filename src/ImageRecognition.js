@@ -12,6 +12,7 @@ class ImageRecognition extends React.Component {
     // labels for the grids
     this.columnNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     this.rowNames = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26'];
+    this.time = 0;
 
     // first make an array of all the images for the boxes - empty strings correspond to a box with not image to be displayed
     for (let i = 0; i < props.images.length; i++) {
@@ -51,14 +52,46 @@ class ImageRecognition extends React.Component {
     sessionStorage.setItem('ImageRecognitionCorrectCoordinate', this.correctCoordinate);
     sessionStorage.setItem('ImageRecognitionArrayTest', this.imageLinksGrid);
 
-    console.log(this.correctCoordinate);
-    console.log(this.correctAnswer);
+    // console.log(this.correctCoordinate);
+    // console.log(this.correctAnswer);
   }
 
   static propTypes = {
     dimension: PropTypes.number.isRequired,
     images: PropTypes.array.isRequired,
-    showLabels: PropTypes.bool.isRequired
+    showLabels: PropTypes.bool.isRequired,
+    displayTime: PropTypes.number.isRequired,
+    onComplete: PropTypes.func.isRequired
+  }
+
+  // lifecycle functions
+  componentDidMount() {
+    // create a timer
+    this.timer = setTimeout(this.handleCompletion, this.props.displayTime);
+
+    this.counter = setInterval(this.tick, 100);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.counter);
+
+    this.handleCompletion()
+  }
+
+  handleCompletion = () => {
+    // done displaying the grid - send up the correct answer and coordinate
+    let data = { // data to export
+      timeDisplayed: this.time,
+      correctImgName: this.correctAnswer,
+      correctCoordinate: this.correctCoordinate,
+      imageLinksGrid: this.imageLinksGrid,
+      timeStamp: new Date()
+    }
+    this.props.onComplete(data);
+  }
+
+  tick = () => {
+    this.time += 0.1;
   }
 
   renderImageBox(imageLink, key) { // returns a grid box
