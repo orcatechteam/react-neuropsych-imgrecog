@@ -9,7 +9,7 @@ This just tests the two components, it first displays the first component for so
 **Image Recognition Props**
 | Name | Type | Description|
 | ------------- | ------------- | ------------- |
-| dimension | Int | The dimensions of the grid. (4x4, 5x5, etc...)|
+| dimension | Int | The dimensions of the grid. (4x4, 5x5, etc...) |
 | images | Array | An array of the names of the images that will be displayed in the grid. This array does not need to be as large as the total number of boxes in the grid because the additional boxes will just be empty spaces. However, the length of this array must be less than or equal to the number of boxes in the grid. |
 | showLabels | Boolean | Whether you would like the grid to have the labels for the rows and columns |
 | onComplete | Function | Callback that is called right before the component is unmounted. It is passed a data object with these 'properties {
