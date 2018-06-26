@@ -8,13 +8,14 @@ class ImageRecognition extends React.Component {
     super(props);
 
     this.imageLinks = new Array(props.dimension * props.dimension); // array that will hold the image link or blank link if the box is empty
-    this.actualDimension = props.dimension + 1;
+    this.actualDimension = props.dimension + 1; // to account for the labels
     // labels for the grids
     this.columnNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     this.rowNames = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26'];
-    this.time = 0;
 
-    // first make an array of all the images for the boxes - empty strings correspond to a box with not image to be displayed
+    this.time = 0.0; // variable to count the amount of time it has been displayed for
+
+    // first make an array of all the images for the boxes - empty strings correspond to a box with no image to be displayed
     for (let i = 0; i < props.images.length; i++) {
       this.imageLinks[i] = props.images[i]; // array of image links given as a property
     }
@@ -24,7 +25,7 @@ class ImageRecognition extends React.Component {
       }
     }
 
-    this.shuffleArray(this.imageLinks);
+    this.shuffleArray(this.imageLinks); // randomly place the images in the grid
 
     // Now turn it into a 2D array
     this.imageLinksGrid = new Array(props.dimension);
@@ -48,12 +49,12 @@ class ImageRecognition extends React.Component {
 
     // save the correct answer as the image name and the corrdinates of the correct box (eg: C3)
     // the React component for asking the user about where he or she saw the image will have to use these sessionStorage keys
-    sessionStorage.setItem('ImageRecognitionCorrectAnswer', this.correctAnswer);
-    sessionStorage.setItem('ImageRecognitionCorrectCoordinate', this.correctCoordinate);
-    sessionStorage.setItem('ImageRecognitionArrayTest', this.imageLinksGrid);
+    // sessionStorage.setItem('ImageRecognitionCorrectAnswer', this.correctAnswer);
+    // sessionStorage.setItem('ImageRecognitionCorrectCoordinate', this.correctCoordinate);
+    // sessionStorage.setItem('ImageRecognitionArrayTest', this.imageLinksGrid);
 
-    // console.log(this.correctCoordinate);
-    // console.log(this.correctAnswer);
+    console.log('Correct Coord: ' + this.correctCoordinate);
+    console.log('Correct ImgName: ' + this.correctAnswer);
   }
 
   static propTypes = {
@@ -66,35 +67,32 @@ class ImageRecognition extends React.Component {
 
   // lifecycle functions
   componentDidMount() {
-    // create a timer
-    this.timer = setTimeout(this.handleCompletion, this.props.displayTime);
-
-    this.counter = setInterval(this.tick, 100);
+    // create a counter to count the display time
+    this.counter = setInterval(this.tick.bind(this), 100);
   }
 
   componentWillUnmount() {
-    clearInterval(this.counter);
-
-    this.handleCompletion()
+    this.handleCompletion(); // send the data regarding the display time and correct answers
   }
 
-  handleCompletion = () => {
+  handleCompletion() {
     // done displaying the grid - send up the correct answer and coordinate
     let data = { // data to export
       timeDisplayed: this.time,
       correctImgName: this.correctAnswer,
       correctCoordinate: this.correctCoordinate,
       imageLinksGrid: this.imageLinksGrid,
-      timeStamp: new Date()
+      timestamp: new Date()
     }
     this.props.onComplete(data);
   }
 
-  tick = () => {
-    this.time += 0.1;
+  tick() { // function to increment the counter
+    this.time = this.time + 0.1;
   }
 
-  renderImageBox(imageLink, key) { // returns a grid box
+  // functions for displaying the grid
+  renderImageBox(imageLink, key) { // returns a grid box for displaying an image
     let dimensionStyle = {
       width: Math.floor(90 / this.actualDimension) + 'vw',
       height: Math.floor(90 / this.actualDimension) + 'vw',
@@ -148,7 +146,7 @@ class ImageRecognition extends React.Component {
     return this.renderGrid();
   }
 
-  shuffleArray(inputArray) {
+  shuffleArray(inputArray) { // this function just shuffles the array randomly
 
     for (let i = inputArray.length - 1; i >= 0; i--) {
       let randomIndex = Math.floor(Math.random() * (i + 1));

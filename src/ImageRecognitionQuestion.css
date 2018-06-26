@@ -1,15 +1,15 @@
-.ImageRecognition {
+.ImageRecognitionQuestion {
   display: flex;
   flex-direction: row;
 }
 
-.board-row:after {
+.question.board-row:after {
   clear: both;
   content: "";
   display: table;
 }
 
-.box {
+.question.box {
   background: #fff;
   border: 1px solid #999;
   float: left;
@@ -22,7 +22,7 @@
   justify-content: center; /* vertical */
 }
 
-.box.selected {
+.question.box.selected {
   background: #00ff00;
   border: 1px solid #999;
   float: left;
@@ -35,20 +35,20 @@
   justify-content: center; /* vertical */
 }
 
-.box.selected:hover {
+.question.box.selected:hover {
   background: #00ff00;
 }
 
-.box:hover {
+.question.box:hover {
   cursor: pointer;
   background: #d3d3d3;
 }
 
-.box:active {
+.question.box:active {
   background: #00ff00;
 }
 
-.box-border {
+.question.box-border {
   background: #fff;
   float: left;
   font-size: 2rem;
