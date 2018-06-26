@@ -61,7 +61,6 @@ class ImageRecognition extends React.Component {
     dimension: PropTypes.number.isRequired,
     images: PropTypes.array.isRequired,
     showLabels: PropTypes.bool.isRequired,
-    displayTime: PropTypes.number.isRequired,
     onComplete: PropTypes.func.isRequired
   }
 

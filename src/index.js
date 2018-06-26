@@ -16,7 +16,6 @@ const images = ['large_black_triangle.png',
                 'small_purple_triangle.png'];
 
 const dimension = 4;
-const displayTime = 3000;
 
 let finishDisplayingGrid = () => {
   // stop displaying the first component
@@ -56,7 +55,6 @@ ReactDOM.render(<ImageRecognition
             dimension={dimension}
             images={images}
             showLabels={true}
-            displayTime={displayTime}
             onComplete={handleImageRecogntionCompletion}/>, document.getElementById('display'));
 
 
