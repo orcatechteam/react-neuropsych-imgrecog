@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- node
+deploy:
+  provider: npm
+  email: rileyt@ohsu.edu
+  skip_cleanup: true
+  on:
+    tags: true
+  api_key:
+    secure:
