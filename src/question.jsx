@@ -5,7 +5,7 @@ import Data from './data';
 import Grid from './grid';
 import ImageBox from './grid-box-image';
 import { withStyles } from '@material-ui/core/styles';
-import cloneDeep from 'lodash.cloneDeep';
+import cloneDeep from 'lodash.clonedeep';
 
 let styles = {
 	"question": {
