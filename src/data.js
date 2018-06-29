@@ -16,31 +16,38 @@ const shuffle = (inputArray) => {
 
 export default class Data {
 
-	// the time the grid was first display with images
-	displayStart = 0
+	// A unix timestamp representing when the display component was mounted
+	displayStart = undefined;
 
-	// the time the grid with images was removed
-	displayStop = 0
+	// A unix timestamp representing when the display component was unmounted
+	displayStop = undefined;
 
-	// the time when the empty grid was shown
-	questionStart = 0
+	// A unix timestamp representing when the question component was mounted
+	questionStart = undefined;
 
-	// the time when the final selection was made
-	questionStop = 0
+	// A unix timestamp representing when the question component was unmounted
+	questionStop = undefined;
 
 	// the correct coordinate
 	coord = undefined;
 
-	// the selected cooordinate
-	selected = undefined
+	// the currently selected coordinate
+	selected = undefined;
 
-	// if they selected the correct coord
+	// True is they selected the correct coordinate
+	// False if they selected the wrong coordinate
+	// Undefined if a selection has not been made
 	correct = undefined;
 
-	// a 2D grid of coordinates to image links
+	// a grid of Coordinate objects
+	//
+	// from display this is a 2D array of NxN dimensions where N is the dimension
+	// property given to the display component
+	//
+	// from questions the 2D array is flattened into an array of size N*N
 	grid = new Array();
 
-	// a list of selections made by the user when they were given an empty grid
+	// a list of selections made by the user when they were given an empty grid.
 	selections = [];
 
 	constructor(images, dimension) {
