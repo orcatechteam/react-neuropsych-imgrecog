@@ -16,6 +16,7 @@ let styles = {
 		padding: "0 0 0 0"
 	}
 }
+
 // returns a grid box for displaying an image or allowing the user to make a selection
 let ImageBox = (props) => {
 	let {
@@ -38,6 +39,7 @@ ImageBox.propTypes = {
 	showBorder: PropTypes.bool,
 	coord: PropTypes.instanceOf(Coord),
 	onSelect: PropTypes.func,
+	percent: PropTypes.number,
 	selected: PropTypes.instanceOf(Coord)
 }
 

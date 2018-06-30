@@ -10,7 +10,17 @@ import cloneDeep from 'lodash.clonedeep';
 let styles = {
 	"question": {
 		"display": "flex",
-		"flexDirection": "row"
+		"flexDirection": "column",
+		"justifyContent": "center"
+	},
+	"imageBox": {
+		verticalAlign: "middle",
+		float: "none",
+		display: "inline-block"
+	},
+	"imageBoxWrapper": {
+		"textAlign": "center",
+		"fontSize": "1.5rem"
 	}
 }
 
@@ -20,7 +30,8 @@ class Question extends React.Component {
 		onSelect: PropTypes.func.isRequired,
 		onComplete: PropTypes.func.isRequired,
 		data: PropTypes.instanceOf(Data).isRequired,
-		showLabels: PropTypes.bool.isRequired
+		showLabels: PropTypes.bool.isRequired,
+		percent: PropTypes.number
 	}
 
 	state = {
@@ -63,14 +74,18 @@ class Question extends React.Component {
 		});
 
 		let data = cloneDeep(this.props.data);
+		data.questionStop = (new Date()).getTime();
 		data.grid = [].concat(...data.grid);
 		this.props.onSelect(data)
 	}
 
 	render() {
 		return <div className={this.props.classes.question}>
-      <ImageBox dims={this.props.data.grid.length} showBorder={false} coord={this.props.data.coord}/>
-      <Grid  showLabels={this.props.showLabels} showImages={false} data={this.props.data} onSelect={this.handleSelect} selected={this.state.selected}/>
+      <div className={this.props.classes.imageBoxWrapper}>
+				<span>Where in this grid did you initially see the following shape: </span>
+				<ImageBox className={this.props.classes.imageBox} percent={this.props.percent} dims={this.props.data.grid.length} showBorder={false} coord={this.props.data.coord}/>
+			</div>
+			<Grid percent={this.props.percent} showLabels={this.props.showLabels} showImages={false} data={this.props.data} onSelect={this.handleSelect} selected={this.state.selected}/>
     </div>;
 	}
 }

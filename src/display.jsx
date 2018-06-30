@@ -4,31 +4,42 @@ import PropTypes from 'prop-types';
 import Data from './data';
 import Grid from './grid';
 
-export default class Display extends React.Component {
+export default class Display extends React.PureComponent {
 
 	static propTypes = {
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
+		timeout: PropTypes.number.isRequired,
 		onComplete: PropTypes.func.isRequired,
-		showLabels: PropTypes.bool.isRequired
+		showLabels: PropTypes.bool.isRequired,
+		percent: PropTypes.number
 	}
 
 	constructor(props) {
 		super(props);
-		this.data = new Data(props.images, props.dimension);
+		this.data = Data.generate(props.images, props.dimension);
 	}
 
 	// lifecycle functions
 	componentDidMount() {
-		this.data.displayStart = (new Date()).getTime()
+		this.data.displayStart = (new Date()).getTime();
+		clearTimeout(this.timeout);
+		if (this.props.timeout > 0) {
+			setTimeout(this.onTimeout, this.props.timeout);
+		}
 	}
 
 	componentWillUnmount() {
-		this.data.displayStop = (new Date()).getTime()
-		this.props.onComplete(this.data); // send the data regarding the display time and correct answers
+		clearTimeout(this.timeout);
+		onTimeout();
+	}
+
+	onTimeout = () => {
+		this.data.displayStop = (new Date()).getTime();
+		this.props.onComplete(this.data);
 	}
 
 	render() {
-		return <Grid showLabels={this.props.showLabels} showImages={true} data={this.data}/>;
+		return <Grid percent={this.props.percent} showLabels={this.props.showLabels} showImages={true} data={this.data}/>;
 	}
 }

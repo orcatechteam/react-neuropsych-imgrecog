@@ -35,12 +35,12 @@ let styles = {
 	}
 }
 
-let dimensions = (size) => {
+let dimensions = (percent, size) => {
 	return {
-		width: Math.floor(90 / size) + 'vw',
-		height: Math.floor(90 / size) + 'vw',
-		maxHeight: Math.floor(90 / size) + 'vh',
-		maxWidth: Math.floor(90 / size) + 'vh'
+		width: Math.floor(percent / size) + 'vw',
+		height: Math.floor(percent / size) + 'vw',
+		maxHeight: Math.floor(percent / size) + 'vh',
+		maxWidth: Math.floor(percent / size) + 'vh'
 	};
 }
 
@@ -65,19 +65,21 @@ let Box = (props) => {
 			props.onSelect(props.coord)
 		}
 	}
-	return <div className={cls.join(" ")} style={dimensions(props.dims+1)} onClick={handleClick}>{renderContent(props)}</div>;
+	return <div className={cls.join(" ")} style={dimensions(props.percent, props.dims+1)} onClick={handleClick}>{renderContent(props)}</div>;
 }
 
 Box.propTypes = {
 	dims: PropTypes.number.isRequired,
 	show: PropTypes.bool,
 	coord: PropTypes.instanceOf(Coord),
+	percent: PropTypes.number,
 	onSelect: PropTypes.func,
 	selected: PropTypes.instanceOf(Coord)
 }
 
 Box.defaultProps = {
-	show: true
+	show: true,
+	percent: 90
 }
 
 export default withStyles(styles)(Box);

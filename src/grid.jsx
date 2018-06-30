@@ -32,6 +32,7 @@ let Grid = (props) => {
 Grid.propTypes = {
 	showLabels: PropTypes.bool.isRequired,
 	showImages: PropTypes.bool.isRequired,
+	percent: PropTypes.number,
 	data: PropTypes.instanceOf(Data).isRequired,
 	selected: PropTypes.instanceOf(Coord),
 	onSelect: PropTypes.func

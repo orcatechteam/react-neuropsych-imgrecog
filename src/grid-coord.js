@@ -1,6 +1,6 @@
 // Coordinate is a coordinate within a 2D grid and optionally contains an image.
 //	The point of origin for the grid is the upper left hand corner
-export default class Coord {
+class Coord {
 
 	// The row number this coordinate resides in
 	row = undefined;
@@ -12,13 +12,35 @@ export default class Coord {
 	// file name or an empty string
 	img = undefined;
 
-	constructor(col, row, img) {
-		this.col = col;
-		this.row = row;
-		this.img = img;
-	}
-
+	// unique key for this coordinate, can be used for equality or as a primary key
 	key() {
 		return this.col + "," + this.row;
 	}
+
+	// converts the Data object into a string
+	stringify = () => {
+		return JSON.stringify(this);
+	}
 }
+
+Coord.generate = (col, row, img) => {
+	let coord = new Coord();
+	coord.col = col;
+	coord.row = row;
+	coord.img = img;
+	return coord;
+};
+
+Coord.parse = (str) => {
+	let obj = JSON.parse(str);
+	if (typeof obj === 'undefined') {
+		return undefined;
+	}
+	let coord = new Coord();
+	coord.col = obj.col;
+	coord.row = obj.row;
+	coord.img = obj.img;
+	return coord;
+};
+
+export default Coord;

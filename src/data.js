@@ -14,7 +14,7 @@ const shuffle = (inputArray) => {
 	return inputArray;
 };
 
-export default class Data {
+class Data {
 
 	// A unix timestamp representing when the display component was mounted
 	displayStart = undefined;
@@ -50,36 +50,87 @@ export default class Data {
 	// a list of selections made by the user when they were given an empty grid.
 	selections = [];
 
-	constructor(images, dimension) {
-		this.grid = new Array(dimension);
-
-		// array that will hold the image link or blank link if the box is empty
-		let imageLinks = new Array(dimension * dimension);
-
-		// first make an array of all the images for the boxes - empty strings correspond to a box with no image to be displayed
-		for (let i = 0; i < images.length; i++) {
-			// array of image links given as a property
-			imageLinks[i] = images[i] === undefined ? "" : images[i];
-		}
-
-		// randomly place the images in the grid
-		shuffle(imageLinks);
-
-		// randomly select a correct answer
-		this.image = images[Math.floor(Math.random() * images.length)];
-
-		// Now turn it into a 2D array
-		for (let i = 0; i < this.grid.length; i++) {
-			let row = new Array(dimension);
-			for (let j = 0; j < dimension; j++) {
-				row[j] = new Coord(j, i, imageLinks[(dimension * i) + j]);
-				if (row[j].img === this.image) {
-					this.coord = row[j];
-				}
-			}
-			this.grid[i] = row;
-		}
-
-		console.log('Correct: (row: ' + this.coord.row + ', col: ' + this.coord.col + ', img: ' + this.coord.img + ')');
+	// converts the Data object into a string
+	stringify = () => {
+		return JSON.stringify(this);
 	}
 }
+
+// parses the string into a Data object
+Data.parse = (str) => {
+	let obj = JSON.parse(str);
+	if (typeof obj === 'undefined') {
+		return undefined;
+	}
+	let data = new Data();
+
+	// numbers
+	data.displayStart = obj.displayStart;
+	data.displayStop = obj.displayStop;
+	data.questionStart = obj.questionStart;
+	data.questionStop = obj.questionStop;
+
+	// coord objects needs to be parsed
+	data.coord = Coord.parse(JSON.stringify(obj.coord));
+	data.selected = obj.selected;
+
+	if (typeof obj.grid !== 'undefined') {
+		for (let i = 0; i < obj.grid.length; i++) {
+			for (let j = 0; j < obj.grid[i].length; j++) {
+				obj.grid[i][j] = Coord.parse(JSON.stringify(obj.grid[i][j]));
+			}
+		}
+	}
+	data.grid = obj.grid;
+
+	// bool
+	data.correct = obj.correct;
+
+	// native objects
+	data.selections = obj.selections;
+
+	return data;
+};
+
+// generate create a new dataset and populates the grid with the images and dimensions given
+Data.generate = (images, dimension) => {
+	let data = new Data();
+
+	if (typeof images === 'undefined' || dimension === 0) {
+		return data;
+	}
+
+	data.grid = new Array(dimension);
+
+	// array that will hold the image link or blank link if the box is empty
+	let imageLinks = new Array(dimension * dimension);
+
+	// first make an array of all the images for the boxes - empty strings correspond to a box with no image to be displayed
+	for (let i = 0; i < images.length; i++) {
+		// array of image links given as a property
+		imageLinks[i] = images[i] === undefined ? "" : images[i];
+	}
+
+	// randomly place the images in the grid
+	imageLinks = shuffle(imageLinks);
+
+	// randomly select a correct answer
+	data.image = images[Math.floor(Math.random() * images.length)];
+
+	// Now turn it into a 2D array
+	for (let i = 0; i < data.grid.length; i++) {
+		let row = new Array(dimension);
+		for (let j = 0; j < dimension; j++) {
+			row[j] = Coord.generate(j, i, imageLinks[(dimension * i) + j]);
+			if (row[j].img === data.image) {
+				data.coord = row[j];
+			}
+		}
+		data.grid[i] = row;
+	}
+
+	console.log('Correct: (row: ' + data.coord.row + ', col: ' + data.coord.col + ', img: ' + data.coord.img + ')');
+	return data;
+};
+
+export default Data;

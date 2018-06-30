@@ -9,7 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 let styles = {
 	"row": {
 		"display": "flex",
-		"flexDirection": "row"
+		"flexDirection": "row",
+		"justifyContent": "center"
 	}
 }
 let Row = (props) => {
@@ -26,7 +27,7 @@ let Row = (props) => {
 
 	// add the first label box
 	if (showLabels) {
-		boxes[0] = (<LabelBox dims={props.dims} showImages={showImages} show={showLabels} key={'rowLabel' + row}>{row+1}</LabelBox>);
+		boxes[0] = (<LabelBox percent={props.percent} dims={props.dims} showImages={showImages} show={showLabels} key={'rowLabel' + row}>{row+1}</LabelBox>);
 	} else {
 		boxes[0] = null;
 	}
@@ -43,6 +44,7 @@ let Row = (props) => {
 Row.propTypes = {
 	dims: PropTypes.number.isRequired,
 	row: PropTypes.number.isRequired,
+	percent: PropTypes.number,
 	data: PropTypes.instanceOf(Data).isRequired,
 	showLabels: PropTypes.bool,
 	showImages: PropTypes.bool,

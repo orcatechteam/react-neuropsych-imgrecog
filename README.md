@@ -17,6 +17,7 @@ This component takes an array of image links and shuffles them into a grid. When
 | Name          | Type     | Description                                                                 |
 | ------------- | -------- | --------------------------------------------------------------------------- |
 | dimension     | Int      | The dimensions of the grid. (4x4, 5x5, etc...)                              |
+| timeout       | Number   | Will trigger an onComplete when the timeout has expired in milliseconds. This feature is disabled for any numbers < 1.   |
 | images        | Array    | An array of the names of the images that will be displayed in the grid. This array does not need to be as large as the total number of boxes in the grid because the additional boxes will just be empty spaces. However, the length of this array must be less than or equal to the number of boxes in the grid. |
 | showLabels    | Boolean  | Whether you would like the grid to have the labels for the rows and columns |
 | onComplete    | Function | Callback that is called with the data object right before the component is unmounted |
@@ -168,6 +169,7 @@ let handleDisplayComplete = (data) => {
 	console.log(data);
 	ReactDOM.render(
 		<Question
+			percent={90}
 			showLabels={true}
 			data={data}
 			onComplete={handleQuestionComplete}
@@ -176,6 +178,7 @@ let handleDisplayComplete = (data) => {
 
 ReactDOM.render(
 	<Display
+		percent={90}
 		showLabels={false}
 		dimension={dimension}
 		images={images}

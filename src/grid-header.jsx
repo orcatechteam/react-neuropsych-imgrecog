@@ -35,6 +35,11 @@ const letters = [
 
 const styles = {
 	"gridHeader": {
+		"display": "flex",
+		"flexDirection": "row",
+		"justifyContent": "center"
+	},
+	"selectable": {
 		"&:after": {
 			clear: "both",
 			content: "''",
@@ -52,9 +57,9 @@ let Header = (props) => {
 		...childProps
 	} = props;
 
-	let cls = [];
+	let cls = [classes.gridHeader];
 	if (selectable) {
-		cls.push(classes.gridHeader);
+		cls.push(classes.selectable);
 	}
 
 	let boxes = new Array(data.grid.length + 1);
@@ -79,6 +84,7 @@ let Header = (props) => {
 Header.propTypes = {
 	data: PropTypes.instanceOf(Data).isRequired,
 	dims: PropTypes.number.isRequired,
+	percent: PropTypes.number,
 	selectable: PropTypes.bool,
 	showImages: PropTypes.bool,
 	showLabels: PropTypes.bool,

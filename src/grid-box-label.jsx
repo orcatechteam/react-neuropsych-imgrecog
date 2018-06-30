@@ -22,6 +22,7 @@ let LabelBox = (props) => {
 LabelBox.propTypes = {
 	dims: PropTypes.number.isRequired,
 	show: PropTypes.bool,
+	percent: PropTypes.number,
 	classes: PropTypes.any.isRequired
 }
 
