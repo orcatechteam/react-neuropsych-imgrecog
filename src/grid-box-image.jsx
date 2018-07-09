@@ -13,7 +13,7 @@ let styles = {
 		top: "50%",
 		maxWidth: "100%",
 		maxHeight: "100%",
-		padding: "0 0 0 0"
+		padding: "2px"
 	}
 }
 
