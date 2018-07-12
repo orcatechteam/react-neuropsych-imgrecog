@@ -1,6 +1,6 @@
 # ORCATECH Image Recognition Test
 
-[![Build Status](https://travis-ci.org/orcatechteam/react-neuropsych-imgrecog.svg?branch=v0.0.2)](https://travis-ci.org/orcatechteam/react-neuropsych-imgrecog)
+[![Build Status](https://travis-ci.org/orcatechteam/react-neuropsych-imgrecog.svg?branch=v1.0.1)](https://travis-ci.org/orcatechteam/react-neuropsych-imgrecog)
 
 This repository holds a set of react components for administering and collecting data from an image recognition test. The test is performed by showing the user a grid of images, have them perform a different task, then show them the same grid without the images and ask where a particular image was.
 
