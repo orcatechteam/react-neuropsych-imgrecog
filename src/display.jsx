@@ -9,10 +9,14 @@ export default class Display extends React.PureComponent {
 	static propTypes = {
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
-		timeout: PropTypes.number.isRequired,
+		timeout: PropTypes.number,
 		onComplete: PropTypes.func.isRequired,
 		showLabels: PropTypes.bool.isRequired,
 		percent: PropTypes.number
+	}
+
+	static defaultProps = {
+		timeout: 0
 	}
 
 	constructor(props) {
@@ -31,7 +35,7 @@ export default class Display extends React.PureComponent {
 
 	componentWillUnmount() {
 		clearTimeout(this.timeout);
-		onTimeout();
+		this.onTimeout();
 	}
 
 	onTimeout = () => {
