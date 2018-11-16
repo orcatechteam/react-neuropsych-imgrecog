@@ -1,23 +1,37 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
 import Data from './data';
 import Grid from './grid';
 
-export default class Display extends React.PureComponent {
+const styles = {
+	imageDescription: {
+		fontSize: '1.25rem',
+		textAlign: 'center'
+	}
+};
 
+class Display extends React.PureComponent {
 	static propTypes = {
+		classes: PropTypes.object.isRequired,
+		currentImageIndex: PropTypes.number,
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
-		timeout: PropTypes.number.isRequired,
 		onComplete: PropTypes.func.isRequired,
+		percent: PropTypes.number,
 		showLabels: PropTypes.bool.isRequired,
-		percent: PropTypes.number
+		timeout: PropTypes.number,
+	}
+
+	static defaultProps = {
+		currentImageIndex: null,
+		timeout: 0
 	}
 
 	constructor(props) {
 		super(props);
-		this.data = Data.generate(props.images, props.dimension);
+		this.data = Data.generate(props.images, props.dimension, props.currentImageIndex);
 	}
 
 	// lifecycle functions
@@ -31,7 +45,7 @@ export default class Display extends React.PureComponent {
 
 	componentWillUnmount() {
 		clearTimeout(this.timeout);
-		onTimeout();
+		this.onTimeout();
 	}
 
 	onTimeout = () => {
@@ -40,6 +54,25 @@ export default class Display extends React.PureComponent {
 	}
 
 	render() {
-		return <Grid percent={this.props.percent} showLabels={this.props.showLabels} showImages={true} data={this.data}/>;
+		// NOTE: let's assume the image file name is also the description
+		const imageDescription = this.data.coord.img.replace(/_/g, " ").split('.').slice(0, -1);
+
+		return (
+			<React.Fragment>
+				<p className={this.props.classes.imageDescription}>
+					Carefully examine this grid of shapes. You will be asked where the {imageDescription} is later.
+					<br />
+					This page will advance automatically.
+				</p>
+				<Grid
+					data={this.data}
+					percent={this.props.percent} 
+					showImages
+					showLabels={this.props.showLabels} 
+				/>
+			</React.Fragment>
+		);
 	}
 }
+
+export default withStyles(styles)(Display);
