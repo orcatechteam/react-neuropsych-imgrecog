@@ -15,6 +15,7 @@ const styles = {
 class Display extends React.PureComponent {
 	static propTypes = {
 		classes: PropTypes.object.isRequired,
+		currentImageIndex: PropTypes.number,
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
 		onComplete: PropTypes.func.isRequired,
@@ -24,12 +25,13 @@ class Display extends React.PureComponent {
 	}
 
 	static defaultProps = {
+		currentImageIndex: null,
 		timeout: 0
 	}
 
 	constructor(props) {
 		super(props);
-		this.data = Data.generate(props.images, props.dimension);
+		this.data = Data.generate(props.images, props.dimension, props.currentImageIndex);
 	}
 
 	// lifecycle functions
@@ -52,7 +54,7 @@ class Display extends React.PureComponent {
 	}
 
 	render() {
-		// assume file name is also the description
+		// NOTE: let's assume the image file name is also the description
 		const imageDescription = this.data.coord.img.replace(/_/g, " ").split('.').slice(0, -1);
 
 		return (
