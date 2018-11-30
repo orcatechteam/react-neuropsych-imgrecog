@@ -55,7 +55,9 @@ class Display extends React.PureComponent {
 
 	render() {
 		// NOTE: let's assume the image file name is also the description
-		const imageDescription = this.data.coord.img.replace(/_/g, " ").split('.').slice(0, -1);
+		const { img } = this.data.coord;
+		const imgFile = (img.indexOf('http') > -1) ? img.substr(img.lastIndexOf('/') + 1) : img;
+		const imageDescription = imgFile.replace(/_/g, " ").split('.').slice(0, -1);
 
 		return (
 			<React.Fragment>
