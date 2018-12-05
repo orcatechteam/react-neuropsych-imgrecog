@@ -93,7 +93,7 @@ Data.parse = (str) => {
 };
 
 // generate create a new dataset and populates the grid with the images and dimensions given
-Data.generate = (images, dimension) => {
+Data.generate = (images, dimension, currentImageIndex) => {
 	let data = new Data();
 
 	if (typeof images === 'undefined' || dimension === 0) {
@@ -114,8 +114,15 @@ Data.generate = (images, dimension) => {
 	// randomly place the images in the grid
 	imageLinks = shuffle(imageLinks);
 
-	// randomly select a correct answer
-	data.image = images[Math.floor(Math.random() * images.length)];
+	let isRandom = false;
+	if (currentImageIndex !== null && typeof currentImageIndex === 'number' && images[currentImageIndex] !== undefined) {
+		// use a static correct answer
+		data.image = images[currentImageIndex];
+	} else {
+		// use a random correct answer
+		isRandom = true;
+		data.image = images[Math.floor(Math.random() * images.length)];
+	}
 
 	// Now turn it into a 2D array
 	for (let i = 0; i < data.grid.length; i++) {
@@ -129,7 +136,7 @@ Data.generate = (images, dimension) => {
 		data.grid[i] = row;
 	}
 
-	console.log('Correct: (row: ' + data.coord.row + ', col: ' + data.coord.col + ', img: ' + data.coord.img + ')');
+	console.log("Correct: (row: %s, col: %s, img: %s, isRandom: %s)", data.coord.row, data.coord.col, data.coord.img, isRandom);
 	return data;
 };
 
