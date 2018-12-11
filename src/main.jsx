@@ -21,7 +21,7 @@ const	question = document.getElementById('question');
 
 const imageSetCombined = [...images, ...images]; // extend out the image set so we have enough to cover 12 months
 const currentMonth = new Date().getMonth();
-const currentImageIndex = images.findIndex(img => img === imageSetCombined[currentMonth]);
+const currentImageIndex = images.indexOf(imageSetCombined[currentMonth]);
 
 // handler everytime the user clicks on a box in the second component
 let handleQSelect = (data) => {
