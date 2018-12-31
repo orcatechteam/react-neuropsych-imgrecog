@@ -19,6 +19,7 @@ class Display extends React.PureComponent {
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
 		onComplete: PropTypes.func.isRequired,
+		onRenderInstructions: PropTypes.func,
 		percent: PropTypes.number,
 		showLabels: PropTypes.bool.isRequired,
 		timeout: PropTypes.number,
@@ -26,6 +27,7 @@ class Display extends React.PureComponent {
 
 	static defaultProps = {
 		currentImageIndex: null,
+		onRenderInstructions: undefined,
 		timeout: 0
 	}
 
@@ -56,10 +58,14 @@ class Display extends React.PureComponent {
 	renderInstructions = () => {
 		// NOTE: let's assume the image file name is also the description
 		const { img } = this.data.coord;
+		const { classes } = this.props;
 		const imgFile = (img.indexOf('http') > -1) ? img.substr(img.lastIndexOf('/') + 1) : img;
 		const imageDescription = imgFile.replace(/_/g, " ").split('.').slice(0, -1);
+		if (this.props.onRenderInstructions !== undefined) {
+			return this.props.onRenderInstructions({ classes, imageDescription });
+		}
 		return (
-			<div className={this.props.classes.imageDescription}>
+			<div className={classes.imageDescription}>
 				<p>Carefully examine this grid of shapes. You will be asked where the {imageDescription} is later.</p>
 				<p>This page will advance automatically.</p>
 			</div>
