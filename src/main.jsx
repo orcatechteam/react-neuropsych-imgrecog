@@ -47,12 +47,21 @@ let handleDComplete = (data) => {
 	);
 };
 
+let handleRenderDisplayInstructions = ({ classes, imageDescription }) => {
+	return (
+		<div>
+			<p>My own display instructions for: {imageDescription}</p>
+		</div>
+	)
+}
+
 ReactDOM.render(
 	<Display
 		currentImageIndex={currentImageIndex}
 		dimension={dimension} 
 		images={images} 
 		onComplete={handleDComplete}
+		onRenderInstructions={handleRenderDisplayInstructions}
 		showLabels={false} 
 	/>,
 	display
