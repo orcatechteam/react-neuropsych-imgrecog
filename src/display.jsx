@@ -53,19 +53,23 @@ class Display extends React.PureComponent {
 		this.props.onComplete(this.data);
 	}
 
-	render() {
+	renderInstructions = () => {
 		// NOTE: let's assume the image file name is also the description
 		const { img } = this.data.coord;
 		const imgFile = (img.indexOf('http') > -1) ? img.substr(img.lastIndexOf('/') + 1) : img;
 		const imageDescription = imgFile.replace(/_/g, " ").split('.').slice(0, -1);
+		return (
+			<div className={this.props.classes.imageDescription}>
+				<p>Carefully examine this grid of shapes. You will be asked where the {imageDescription} is later.</p>
+				<p>This page will advance automatically.</p>
+			</div>
+		);
+	}
 
+	render() {
 		return (
 			<React.Fragment>
-				<p className={this.props.classes.imageDescription}>
-					Carefully examine this grid of shapes. You will be asked where the {imageDescription} is later.
-					<br />
-					This page will advance automatically.
-				</p>
+				{this.renderInstructions()}
 				<Grid
 					data={this.data}
 					percent={this.props.percent} 
