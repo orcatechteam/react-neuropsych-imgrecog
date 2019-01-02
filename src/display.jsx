@@ -8,7 +8,10 @@ import Grid from './grid';
 const styles = {
 	imageDescription: {
 		fontSize: '1.25rem',
-		textAlign: 'center'
+		textAlign: 'center',
+		'& p': {
+			marginBottom: '1em'
+		}
 	}
 };
 
