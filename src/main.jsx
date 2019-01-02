@@ -49,8 +49,9 @@ let handleDComplete = (data) => {
 
 let handleRenderDisplayInstructions = ({ classes, imageDescription }) => {
 	return (
-		<div>
+		<div className={classes.imageDescription}>
 			<p>My own display instructions for: {imageDescription}</p>
+			<p>Some more instructions...</p>
 		</div>
 	)
 }
@@ -72,5 +73,5 @@ setTimeout(
 	() => {
 		ReactDOM.unmountComponentAtNode(display);
 	},
-	5000
+	5000000
 );
