@@ -21,7 +21,10 @@ let styles = {
 	},
 	"imageBoxWrapper": {
 		"textAlign": "center",
-		"fontSize": "1.5rem"
+		"fontSize": "1.5rem",
+		"& p": {
+			fontSize: '1.25rem'
+		}
 	}
 };
 
@@ -93,6 +96,7 @@ class Question extends React.Component {
 						percent={this.props.percent}
 						showBorder={false}
 					/>
+					<p>Take your best guess, even if you are not sure. Click a location in the grid closest to where you think you saw the shape before to end the survey.</p>
 				</div>
 				<Grid
 					data={this.props.data}
