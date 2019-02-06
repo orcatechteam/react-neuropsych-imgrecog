@@ -73,5 +73,5 @@ setTimeout(
 	() => {
 		ReactDOM.unmountComponentAtNode(display);
 	},
-	5000000
+	5000
 );

@@ -1,11 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import cloneDeep from 'lodash.clonedeep';
+
+import { withStyles } from '@material-ui/core/styles';
+
 import Data from './data';
 import Grid from './grid';
 import ImageBox from './grid-box-image';
-import { withStyles } from '@material-ui/core/styles';
-import cloneDeep from 'lodash.clonedeep';
 
 let styles = {
 	"question": {
@@ -20,18 +21,22 @@ let styles = {
 	},
 	"imageBoxWrapper": {
 		"textAlign": "center",
-		"fontSize": "1.5rem"
+		"fontSize": "1.5rem",
+		"& p": {
+			fontSize: '1.25rem'
+		}
 	}
-}
+};
 
 class Question extends React.Component {
 
 	static propTypes = {
-		onSelect: PropTypes.func.isRequired,
-		onComplete: PropTypes.func.isRequired,
+		classes: PropTypes.object.isRequired,
 		data: PropTypes.instanceOf(Data).isRequired,
+		onComplete: PropTypes.func.isRequired,
+		onSelect: PropTypes.func.isRequired,
+		percent: PropTypes.number,
 		showLabels: PropTypes.bool.isRequired,
-		percent: PropTypes.number
 	}
 
 	state = {
@@ -51,7 +56,7 @@ class Question extends React.Component {
 
 	equals(coord1, coord2) {
 		if (typeof coord1 === 'undefined' || typeof coord2 === 'undefined') {
-			return false
+			return false;
 		}
 		return coord1.key() === coord2.key();
 	}
@@ -76,17 +81,33 @@ class Question extends React.Component {
 		let data = cloneDeep(this.props.data);
 		data.questionStop = (new Date()).getTime();
 		data.grid = [].concat(...data.grid);
-		this.props.onSelect(data)
+		this.props.onSelect(data);
 	}
 
 	render() {
-		return <div className={this.props.classes.question}>
-      <div className={this.props.classes.imageBoxWrapper}>
-				<span>Where in this grid did you initially see the following shape: </span>
-				<ImageBox className={this.props.classes.imageBox} percent={this.props.percent} dims={this.props.data.grid.length} showBorder={false} coord={this.props.data.coord}/>
+		return (
+			<div className={this.props.classes.question}>
+				<div className={this.props.classes.imageBoxWrapper}>
+					<span>Where in this grid did you initially see the following shape: </span>
+					<ImageBox 
+						className={this.props.classes.imageBox}
+						coord={this.props.data.coord}
+						dims={this.props.data.grid.length}
+						percent={this.props.percent}
+						showBorder={false}
+					/>
+					<p>Take your best guess, even if you are not sure. Click a location in the grid closest to where you think you saw the shape before to end the survey.</p>
+				</div>
+				<Grid
+					data={this.props.data}
+					onSelect={this.handleSelect}
+					percent={this.props.percent}
+					selected={this.state.selected}
+					showImages={false}
+					showLabels={this.props.showLabels}
+				/>
 			</div>
-			<Grid percent={this.props.percent} showLabels={this.props.showLabels} showImages={false} data={this.props.data} onSelect={this.handleSelect} selected={this.state.selected}/>
-    </div>;
+		);
 	}
 }
 
