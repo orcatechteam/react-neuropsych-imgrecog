@@ -12,8 +12,10 @@ let styles = {
 		"flexDirection": "row",
 		"justifyContent": "center"
 	}
-}
-let Row = (props) => {
+};
+
+const Row = props => {
+
 	let {
 		row,
 		data,
@@ -27,7 +29,17 @@ let Row = (props) => {
 
 	// add the first label box
 	if (showLabels) {
-		boxes[0] = (<LabelBox percent={props.percent} dims={props.dims} showImages={showImages} show={showLabels} key={'rowLabel' + row}>{row+1}</LabelBox>);
+		boxes[0] = (
+			<LabelBox 
+				dims={props.dims} 
+				key={'rowLabel' + row}
+				percent={props.percent} 
+				show={showLabels} 
+				showImages={showImages} 
+			>
+				{row+1}
+			</LabelBox>
+		);
 	} else {
 		boxes[0] = null;
 	}
@@ -35,26 +47,41 @@ let Row = (props) => {
 	// add grid contents
 	for (let col = 0; col < data.grid[row].length; col++) {
 		let coord = data.grid[row][col];
-		boxes[col + 1] = <ImageBox {...childProps} show={props.showImages} key={coord.key()} coord={coord}/>;
+		boxes[col + 1] = (
+			<ImageBox
+				{...childProps}
+				coord={coord}
+				key={coord.key()}
+				show={props.showImages}
+			/>
+		);
 	};
 
-	return <div className={props.classes.row} key={'row' + (row + 1)}>{boxes}</div>
-}
+	return (
+		<div
+			className={classes.row}
+			key={'row' + (row + 1)}
+		>
+			{boxes}
+		</div>
+	);
+};
 
 Row.propTypes = {
-	dims: PropTypes.number.isRequired,
-	row: PropTypes.number.isRequired,
-	percent: PropTypes.number,
+	classes: PropTypes.object.isRequired,
 	data: PropTypes.instanceOf(Data).isRequired,
-	showLabels: PropTypes.bool,
-	showImages: PropTypes.bool,
+	dims: PropTypes.number.isRequired,
+	onSelect: PropTypes.func,
+	percent: PropTypes.number,
+	row: PropTypes.number.isRequired,
 	selected: PropTypes.instanceOf(Coord),
-	onSelect: PropTypes.func
-}
+	showImages: PropTypes.bool,
+	showLabels: PropTypes.bool,
+};
 
 Row.defaultProps = {
 	showLabels: true,
 	showImages: true
-}
+};
 
 export default withStyles(styles)(Row);

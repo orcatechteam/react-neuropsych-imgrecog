@@ -35,7 +35,6 @@ let handleQComplete = (data) => {
 
 // handler for when the first component that displays the grid is done displaying
 let handleDComplete = (data) => {
-	console.log(data);
 	ReactDOM.render(
 		<Question
 			data={data}

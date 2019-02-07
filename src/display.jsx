@@ -81,9 +81,9 @@ class Display extends React.PureComponent {
 				{this.renderInstructions()}
 				<Grid
 					data={this.data}
-					percent={this.props.percent} 
+					percent={this.props.percent}
 					showImages
-					showLabels={this.props.showLabels} 
+					showLabels={this.props.showLabels}
 				/>
 			</React.Fragment>
 		);
