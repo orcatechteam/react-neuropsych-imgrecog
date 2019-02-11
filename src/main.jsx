@@ -23,6 +23,8 @@ const imageSetCombined = [...images, ...images]; // extend out the image set so 
 const currentMonth = new Date().getMonth();
 const currentImageIndex = images.indexOf(imageSetCombined[currentMonth]);
 
+const timeout = 1000;
+
 // handler everytime the user clicks on a box in the second component
 let handleQSelect = (data) => {
 	console.log(data);
@@ -33,8 +35,7 @@ let handleQComplete = (data) => {
 	console.log(data);
 };
 
-// handler for when the first component that displays the grid is done displaying
-let handleDComplete = (data) => {
+const handleQStart = data => {
 	ReactDOM.render(
 		<Question
 			data={data}
@@ -46,31 +47,42 @@ let handleDComplete = (data) => {
 	);
 };
 
+// handler for when the first component that displays the grid is done displaying
+let handleDComplete = (data) => {
+	handleQStart(data);
+};
+
 let handleRenderDisplayInstructions = ({ classes, imageDescription }) => {
 	return (
 		<div className={classes.imageDescription}>
 			<p>My own display instructions for: {imageDescription}</p>
 			<p>Some more instructions...</p>
 		</div>
-	)
-}
+	);
+};
+
+const handleDStart = () => {
+	// stop displaying the first component after 5 seconds
+	setTimeout(
+		() => {
+			ReactDOM.unmountComponentAtNode(display);
+		},
+		timeout
+	);
+};
 
 ReactDOM.render(
 	<Display
 		currentImageIndex={currentImageIndex}
-		dimension={dimension} 
-		images={images} 
+		delayedStart
+		dimension={dimension}
+		images={images}
 		onComplete={handleDComplete}
 		onRenderInstructions={handleRenderDisplayInstructions}
-		showLabels={false} 
+		onStart={handleDStart}
+		showLabels={false}
+		timeout={timeout}
 	/>,
 	display
 );
 
-// stop displaying the first component after 5 seconds
-setTimeout(
-	() => {
-		ReactDOM.unmountComponentAtNode(display);
-	},
-	5000
-);

@@ -19,9 +19,11 @@ class Display extends React.PureComponent {
 	static propTypes = {
 		classes: PropTypes.object.isRequired,
 		currentImageIndex: PropTypes.number,
+		delayedStart: PropTypes.bool,
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
 		onComplete: PropTypes.func.isRequired,
+		onStart: PropTypes.func,
 		onRenderInstructions: PropTypes.func,
 		percent: PropTypes.number,
 		showLabels: PropTypes.bool.isRequired,
@@ -30,8 +32,10 @@ class Display extends React.PureComponent {
 
 	static defaultProps = {
 		currentImageIndex: null,
+		delayedStart: false,
 		onRenderInstructions: undefined,
-		timeout: 0
+		onStart: () => {},
+		timeout: 0,
 	}
 
 	constructor(props) {
@@ -39,18 +43,30 @@ class Display extends React.PureComponent {
 		this.data = Data.generate(props.images, props.dimension, props.currentImageIndex);
 	}
 
+	state = {
+		startDisplay: false
+	}
+
 	// lifecycle functions
 	componentDidMount() {
-		this.data.displayStart = (new Date()).getTime();
-		clearTimeout(this.timeout);
-		if (this.props.timeout > 0) {
-			setTimeout(this.onTimeout, this.props.timeout);
+		if (this.props.delayedStart === false) {
+			this.handleTimeoutStart();
 		}
 	}
 
 	componentWillUnmount() {
 		clearTimeout(this.timeout);
 		this.onTimeout();
+	}
+
+	handleTimeoutStart = () => {
+		this.data.displayStart = (new Date()).getTime();
+		clearTimeout(this.timeout);
+		if (this.props.timeout > 0) {
+			setTimeout(this.onTimeout, this.props.timeout);
+		}
+		this.setState({ startDisplay: true });
+		this.props.onStart();
 	}
 
 	onTimeout = () => {
@@ -79,12 +95,18 @@ class Display extends React.PureComponent {
 		return (
 			<React.Fragment>
 				{this.renderInstructions()}
-				<Grid
-					data={this.data}
-					percent={this.props.percent}
-					showImages
-					showLabels={this.props.showLabels}
-				/>
+				{this.state.startDisplay ? (
+					<Grid
+						data={this.data}
+						percent={this.props.percent}
+						showImages
+						showLabels={this.props.showLabels}
+					/>
+				) : (
+					<div style={{ textAlign: 'center' }}>
+						<button onClick={this.handleTimeoutStart}>Start</button>
+					</div>
+				)}
 			</React.Fragment>
 		);
 	}
