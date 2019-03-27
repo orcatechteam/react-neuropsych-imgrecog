@@ -23,7 +23,7 @@ const imageSetCombined = [...images, ...images]; // extend out the image set so 
 const currentMonth = new Date().getMonth();
 const currentImageIndex = images.indexOf(imageSetCombined[currentMonth]);
 
-const timeout = 1000;
+const timeout = 3000;
 
 // handler everytime the user clicks on a box in the second component
 let handleQSelect = (data) => {
@@ -71,6 +71,10 @@ const handleDStart = () => {
 	);
 };
 
+const handleDisplayContentBelowGrid = () => (
+	<div style={{ textAlign: 'center', paddingTop: '15px' }}>Some content below the grid...</div>
+);
+
 ReactDOM.render(
 	<Display
 		currentImageIndex={currentImageIndex}
@@ -78,6 +82,7 @@ ReactDOM.render(
 		dimension={dimension}
 		images={images}
 		onComplete={handleDComplete}
+		onRenderContentBelowGrid={handleDisplayContentBelowGrid}
 		onRenderInstructions={handleRenderDisplayInstructions}
 		onStart={handleDStart}
 		showLabels={false}

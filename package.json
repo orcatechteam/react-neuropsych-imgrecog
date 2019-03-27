@@ -1,6 +1,6 @@
 {
   "name": "@orcatech/react-neuropsych-imgrecog",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "React components for image recognition testing",
   "main": "dist/react-neuropsych-imgrecog.js",
   "scripts": {
