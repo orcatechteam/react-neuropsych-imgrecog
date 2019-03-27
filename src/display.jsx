@@ -23,8 +23,9 @@ class Display extends React.PureComponent {
 		dimension: PropTypes.number.isRequired,
 		images: PropTypes.array.isRequired,
 		onComplete: PropTypes.func.isRequired,
-		onStart: PropTypes.func,
+		onRenderContentBelowGrid: PropTypes.func,
 		onRenderInstructions: PropTypes.func,
+		onStart: PropTypes.func,
 		percent: PropTypes.number,
 		showLabels: PropTypes.bool.isRequired,
 		timeout: PropTypes.number,
@@ -33,6 +34,7 @@ class Display extends React.PureComponent {
 	static defaultProps = {
 		currentImageIndex: null,
 		delayedStart: false,
+		onRenderContentBelowGrid: undefined,
 		onRenderInstructions: undefined,
 		onStart: () => {},
 		timeout: 0,
@@ -91,6 +93,17 @@ class Display extends React.PureComponent {
 		);
 	}
 
+	onRenderContentBelowGrid = () => {
+		if (!this.state.startDisplay) {
+			return null;
+		}
+		const { classes } = this.props;
+		if (this.props.onRenderContentBelowGrid !== undefined) {
+			return this.props.onRenderContentBelowGrid({ classes });
+		}
+		return null;
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -107,6 +120,7 @@ class Display extends React.PureComponent {
 						<button onClick={this.handleTimeoutStart}>Start</button>
 					</div>
 				)}
+				{this.onRenderContentBelowGrid()}
 			</React.Fragment>
 		);
 	}
