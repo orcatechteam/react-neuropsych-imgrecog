@@ -71,6 +71,7 @@ Row.propTypes = {
 	classes: PropTypes.object.isRequired,
 	data: PropTypes.instanceOf(Data).isRequired,
 	dims: PropTypes.number.isRequired,
+	onBoxCoord: PropTypes.func,
 	onSelect: PropTypes.func,
 	percent: PropTypes.number,
 	row: PropTypes.number.isRequired,

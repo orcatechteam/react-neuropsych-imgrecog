@@ -33,7 +33,7 @@ let styles = {
 			background: Theme.boxSelectedBackground
 		}
 	}
-}
+};
 
 let dimensions = (percent, size) => {
 	return {
@@ -42,14 +42,14 @@ let dimensions = (percent, size) => {
 		maxHeight: Math.floor(percent / size) + 'vh',
 		maxWidth: Math.floor(percent / size) + 'vh'
 	};
-}
+};
 
 let renderContent = (props) => {
 	if (props.show) {
 		return props.children;
 	}
 	return null;
-}
+};
 
 let Box = (props) => {
 	let cls = [props.classes.box];
@@ -60,26 +60,35 @@ let Box = (props) => {
 		cls.push(props.classes.selectable);
 	}
 
-	let handleClick = () => {
+	let handleClick = (evt) => {
 		if (typeof props.onSelect !== 'undefined') {
-			props.onSelect(props.coord)
+			const { pageX, pageY } = evt.nativeEvent;
+			props.onSelect({ coord: props.coord, pageX, pageY });
 		}
-	}
-	return <div className={cls.join(" ")} style={dimensions(props.percent, props.dims+1)} onClick={handleClick}>{renderContent(props)}</div>;
-}
+	};
+	return (
+		<div
+			className={cls.join(" ")}
+			onClick={handleClick}
+			style={dimensions(props.percent, props.dims+1)}
+		>
+			{renderContent(props)}
+		</div>
+	);
+};
 
 Box.propTypes = {
-	dims: PropTypes.number.isRequired,
-	show: PropTypes.bool,
 	coord: PropTypes.instanceOf(Coord),
-	percent: PropTypes.number,
+	dims: PropTypes.number.isRequired,
 	onSelect: PropTypes.func,
-	selected: PropTypes.instanceOf(Coord)
-}
+	percent: PropTypes.number,
+	selected: PropTypes.instanceOf(Coord),
+	show: PropTypes.bool
+};
 
 Box.defaultProps = {
 	show: true,
 	percent: 90
-}
+};
 
 export default withStyles(styles)(Box);

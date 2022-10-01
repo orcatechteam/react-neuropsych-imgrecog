@@ -15,36 +15,83 @@ let styles = {
 		maxHeight: "100%",
 		padding: "2px"
 	}
-}
+};
 
 // returns a grid box for displaying an image or allowing the user to make a selection
-let ImageBox = (props) => {
-	let {
-		classes,
-		showBorder,
-		...childProps
-	} = props;
-	let cls = [];
-	if (showBorder) {
-		cls.push(classes.imageBox)
+class ImageBox extends React.Component {
+	constructor(props) {
+		super(props);
+		this.imgBoxRef = React.createRef();
 	}
-	return <Box className={cls.join(" ")} {...childProps}>
-			{<img className={classes.image} src={props.coord.img} alt=''></img>}
-		</Box>;
+
+	componentDidMount() {
+		this.handleBoxCoord();
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		this.handleBoxCoord();
+	}
+
+	handleBoxCoord = () => {
+		const props = this.props;
+		let {
+			onBoxCoord,
+		} = props;
+		if (this.imgBoxRef.current && onBoxCoord !== undefined) {
+			const { offsetTop, offsetLeft, offsetWidth, offsetHeight } = this.imgBoxRef.current;
+			const { coord } = props;
+			const boxCoord = {
+				offsetTop,
+				offsetLeft,
+				offsetWidth,
+				offsetHeight,
+				coord,
+			};
+			onBoxCoord(boxCoord);
+		}
+
+	}
+
+	render() {
+		const props = this.props;
+		let {
+			classes,
+			showBorder,
+			...childProps
+		} = props;
+		let cls = [];
+		if (showBorder) {
+			cls.push(classes.imageBox);
+		}
+		return (
+			<div ref={this.imgBoxRef}>
+				<Box
+					className={cls.join(" ")}
+					{...childProps}
+				>
+					{<img className={classes.image} src={props.coord.img} alt=''></img>}
+				</Box>
+			</div>
+		);
+	}
 }
 
 ImageBox.propTypes = {
-	dims: PropTypes.number.isRequired,
-	show: PropTypes.bool,
-	showBorder: PropTypes.bool,
+	classes: PropTypes.object,
 	coord: PropTypes.instanceOf(Coord),
+	dims: PropTypes.number.isRequired,
+	onBoxCoord: PropTypes.func,
 	onSelect: PropTypes.func,
 	percent: PropTypes.number,
-	selected: PropTypes.instanceOf(Coord)
-}
+	selected: PropTypes.instanceOf(Coord),
+	show: PropTypes.bool,
+	showBorder: PropTypes.bool,
+};
 
 ImageBox.defaultProps = {
 	show: true,
 	showBorder: true
-}
+};
+
 export default withStyles(styles)(ImageBox);
+

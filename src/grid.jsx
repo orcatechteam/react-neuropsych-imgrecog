@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import PropTypes from 'prop-types';
 import Header from './grid-header';
 import Row from './grid-row';
@@ -10,32 +10,52 @@ let Grid = (props) => {
 	let {
 		selected,
 		onSelect,
+		onBoxCoord,
 		...childProps
 	} = props;
 
 	let rows = [];
 	for (let i = 0; i < props.data.grid.length; i++) {
-		rows.push(<Row key={"row" + i} selected={selected} onSelect={onSelect} row={i} dims={props.data.grid.length}  {...childProps}/>);
+		rows.push(
+			<Row
+				dims={props.data.grid.length}
+				key={"row" + i}
+				onBoxCoord={onBoxCoord}
+				onSelect={onSelect}
+				row={i}
+				selected={selected}
+				{...childProps}
+			/>
+		);
 	}
 
 	let header = null;
 	if (props.showLabels) {
-		header = <Header dims={props.data.grid.length} selectable={typeof props.onSelect !== 'undefined'} {...childProps}/>;
+		header = (
+			<Header
+				dims={props.data.grid.length}
+				selectable={typeof props.onSelect !== 'undefined'}
+				{...childProps}
+			 />
+		);
 	}
 
-	return <div>
-		{header}
-		{rows}
-	</div>;
-}
+	return (
+		<div>
+			{header}
+			{rows}
+		</div>
+	);
+};
 
 Grid.propTypes = {
-	showLabels: PropTypes.bool.isRequired,
-	showImages: PropTypes.bool.isRequired,
-	percent: PropTypes.number,
 	data: PropTypes.instanceOf(Data).isRequired,
+	onBoxCoord: PropTypes.func,
+	onSelect: PropTypes.func,
+	percent: PropTypes.number,
 	selected: PropTypes.instanceOf(Coord),
-	onSelect: PropTypes.func
-}
+	showImages: PropTypes.bool.isRequired,
+	showLabels: PropTypes.bool.isRequired,
+};
 
 export default Grid;

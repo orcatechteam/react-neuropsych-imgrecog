@@ -40,8 +40,10 @@ class Question extends React.Component {
 	}
 
 	state = {
-		selected: undefined
+		selected: undefined,
 	}
+
+	boxCoords = {}
 
 	// lifecycle functions
 	componentDidMount() {
@@ -61,11 +63,29 @@ class Question extends React.Component {
 		return coord1.key() === coord2.key();
 	}
 
-	handleSelect = (coord) => {
+	handleSelect = ({ coord, pageX, pageY }) => {
+		const correctCoord = this.props.data.coord;
+		const correctBoxCoord = this.boxCoords[`r${correctCoord.row}c${correctCoord.col}`];
+		let distanceToCorrect = null;
+		if (correctBoxCoord !== undefined) {
+			distanceToCorrect = this.getDistanceToCorrect({
+				box: {
+					x: correctBoxCoord.offsetLeft,
+					y: correctBoxCoord.offsetTop,
+					width: correctBoxCoord.offsetWidth,
+					height: correctBoxCoord.offsetHeight,
+				},
+				click: {
+					x: pageX,
+					y: pageY,
+				},
+			});
+		}
 		coord = this.equals(coord, this.state.selected) ? undefined : coord;
 
 		this.props.data.selected = coord;
 		this.props.data.correct = this.equals(coord, this.props.data.coord);
+		this.props.data.distanceToCorrect = distanceToCorrect;
 
 		// update selection
 		this.setState({ selected: coord });
@@ -75,13 +95,30 @@ class Question extends React.Component {
 			stamp: (new Date()).getTime(),
 			pickedCoord: this.props.data.selected,
 			correctCoord: this.props.data.coord,
-			correct: this.props.data.correct
+			correct: this.props.data.correct,
+			distanceToCorrect,
 		});
 
 		let data = cloneDeep(this.props.data);
 		data.questionStop = (new Date()).getTime();
 		data.grid = [].concat(...data.grid);
 		this.props.onSelect(data);
+	}
+
+	getDistanceToCorrect = (params) => {
+		const { box, click } = params;
+		return Math.round(Math.sqrt(
+			(Math.pow(click.x - (box.x+(box.width/2)), 2)) + (Math.pow(click.y - (box.y+(box.height/2)), 2))
+		));
+	}
+
+	handleBoxDOMCoordinate = (boxCoord) => {
+		// console.log('handleBoxDOMCoordinate', boxCoord);
+		// const { offsetLeft, offsetTop } = boxCoord;
+		const { row, col } = boxCoord.coord;
+		// console.log({ row, col }, { offsetLeft, offsetTop });
+		// this.boxCoords = [...this.boxCoords, boxCoord];
+		this.boxCoords[`r${row}c${col}`] = boxCoord;
 	}
 
 	render() {
@@ -93,6 +130,7 @@ class Question extends React.Component {
 						className={this.props.classes.imageBox}
 						coord={this.props.data.coord}
 						dims={this.props.data.grid.length}
+						onBoxCoord={() => {}}
 						percent={this.props.percent}
 						showBorder={false}
 					/>
@@ -100,6 +138,7 @@ class Question extends React.Component {
 				</div>
 				<Grid
 					data={this.props.data}
+					onBoxCoord={this.handleBoxDOMCoordinate}
 					onSelect={this.handleSelect}
 					percent={this.props.percent}
 					selected={this.state.selected}
